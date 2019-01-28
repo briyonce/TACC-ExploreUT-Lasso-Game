@@ -3,7 +3,7 @@ int maxNoFish = 10;  // the total number of fish displayed
 PImage tank;
 
 public void settings() {
-  size(1000, 600);
+  size(1500, 1000);
 }
 
 void setup() {
@@ -12,11 +12,11 @@ void setup() {
   
   // get the background image of the aquarium tank. 
   // This will be displayed every time draw() is called.
-  tank = loadImage( "aquarium.jpg" );
+  tank = loadImage( "Aquarium.jpg" );
   
   // create the collection of images making up the animation
   // for a given fish.
-  PImage[] images = new PImage[8];
+  PImage[] images = new PImage[2];
   images[0] = loadImage( "fish0.gif" );
   images[1] = loadImage( "fish1.gif" );
 
@@ -26,12 +26,12 @@ void setup() {
     // new fish
     schoolOfFish[ fishNo ] = new Prey( );
 
-    // add 8 frames for each fish.  Do not 
+    // add 2 frames for each fish.  Do not 
     // start with frame 0 for all fish, so that
     // they will not be synchronized.
-    for ( int i=0; i<8; i++ ) { 
+    for ( int i=0; i<2; i++ ) { 
      schoolOfFish[ fishNo ].addFrame( 
-           images[ (i + fishNo*2 ) % 8 ] );
+           images[ (i + fishNo*2 ) % 2 ] );
     }
   }
   
@@ -40,7 +40,12 @@ void setup() {
   frameRate( 10 );
 }
 
-
+void mouseClicked() {
+  // do click stuff
+  stroke(255);
+  point(mouseX, mouseY);
+}
+ 
 void draw() {
   //--- Animation loop ---
   

@@ -26,6 +26,7 @@ class Prey {
      y = y + random( -2, 2 );
    }
    
+   
    // draw a new frame of the fish.
    void draw() {
      image( frames[frameCount%noFrames], x, y );
