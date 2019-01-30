@@ -1,12 +1,22 @@
+import vialab.SMT.*;
+
 Prey[] schoolOfFish; // the array containing all the fish
 int maxNoFish = 10;  // the total number of fish displayed
 PImage tank;
+int zone_count = 0;
+
 
 public void settings() {
-  size(1500, 1000);
+  //size(displayWidth, displayHeight, SMT.RENDERER);
 }
 
 void setup() {
+  size(displayWidth, displayHeight, SMT.RENDERER);
+  SMT.init(this, TouchSource.AUTOMATIC);
+  registerMethod("pre", this);
+  
+}
+void pre(){
   // window geometry 
   smooth();
   
@@ -21,10 +31,20 @@ void setup() {
   images[1] = loadImage( "fish1.gif" );
 
   // create the school of fish
-  schoolOfFish = new Prey[maxNoFish];
+  while(zone_count < maxNoFish){
+    Prey prey = new Prey();
+    for ( int i=0; i<2; i++ ) { 
+         prey.addFrame( 
+         images[ i   ] );
+    }
+    SMT.add(prey);
+   zone_count++; 
+  }
+  /*schoolOfFish = new Prey[maxNoFish];
   for ( int fishNo = 0; fishNo < maxNoFish; fishNo++ ) {
     // new fish
-    schoolOfFish[ fishNo ] = new Prey( );
+    Prey fish = new Prey("SingleFish");
+    schoolOfFish[ fishNo ] = new Prey(fish);
 
     // add 2 frames for each fish.  Do not 
     // start with frame 0 for all fish, so that
@@ -33,19 +53,42 @@ void setup() {
      schoolOfFish[ fishNo ].addFrame( 
            images[ (i + fishNo*2 ) % 2 ] );
     }
-  }
+    SMT.add(fish);
+  }*/
   
   // set the frame rate to 10, so that fish are not
   // swimming too fast.
   frameRate( 10 );
 }
 
-void mouseClicked() {
+/*void mouseClicked() {
   // do click stuff
   stroke(255);
   point(mouseX, mouseY);
+}*/
+void drawPrey(Prey zone){
+  if(zone.safe){
+    SMT.remove(zone);
+    zone_count--;
+  } else {
+  image( zone.frames[frameCount%zone.noFrames], zone.x, zone.y );
+  zone.move();
+  }
+  /*for ( int fishNo = 0; fishNo < maxNoFish; fishNo++ ) { 
+   schoolOfFish[ fishNo ].draw();
+   schoolOfFish[ fishNo ].move();
+  }*/
 }
- 
+
+void touchPrey(Prey zone){
+  println("touched prey");
+ if(zone.safe == false){
+     zone.safe = true;
+     zone.unassignAll();
+     //highlight the top of the thang, do the accounting of the thangs, update game
+ }
+     
+}
 void draw() {
   //--- Animation loop ---
   
@@ -56,8 +99,8 @@ void draw() {
   
   // display new frame for each fish, then move the fish
   // forward.
-  for ( int fishNo = 0; fishNo < maxNoFish; fishNo++ ) { 
-    schoolOfFish[ fishNo ].draw();
-    schoolOfFish[ fishNo ].move();
-  }  
+  //for ( int fishNo = 0; fishNo < maxNoFish; fishNo++ ) { 
+   // schoolOfFish[ fishNo ].draw();
+   // schoolOfFish[ fishNo ].move();
+  //}  
 }
